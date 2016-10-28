@@ -11,3 +11,4 @@ src/main/resources/ERD.mwb.bak
 src/test/resources/target_systems_repo_urls.txt
 *.prefs
 cotonet-files/*
+.idea/
