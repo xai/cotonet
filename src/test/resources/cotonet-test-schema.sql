@@ -5,22 +5,22 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 -- -----------------------------------------------------
--- Schema cotonet-test
+-- Schema cotonet_test
 -- -----------------------------------------------------
-DROP SCHEMA IF EXISTS `cotonet-test` ;
+DROP SCHEMA IF EXISTS `cotonet_test` ;
 
 -- -----------------------------------------------------
--- Schema cotonet-test
+-- Schema cotonet_test
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `cotonet-test` DEFAULT CHARACTER SET utf8 ;
-USE `cotonet-test` ;
+CREATE SCHEMA IF NOT EXISTS `cotonet_test` DEFAULT CHARACTER SET utf8 ;
+USE `cotonet_test` ;
 
 -- -----------------------------------------------------
--- Table `cotonet-test`.`systems`
+-- Table `cotonet_test`.`systems`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `cotonet-test`.`systems` ;
+DROP TABLE IF EXISTS `cotonet_test`.`systems` ;
 
-CREATE TABLE IF NOT EXISTS `cotonet-test`.`systems` (
+CREATE TABLE IF NOT EXISTS `cotonet_test`.`systems` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `url` VARCHAR(100) NOT NULL,
@@ -29,11 +29,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `cotonet-test`.`developers`
+-- Table `cotonet_test`.`developers`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `cotonet-test`.`developers` ;
+DROP TABLE IF EXISTS `cotonet_test`.`developers` ;
 
-CREATE TABLE IF NOT EXISTS `cotonet-test`.`developers` (
+CREATE TABLE IF NOT EXISTS `cotonet_test`.`developers` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `email1` VARCHAR(100) NOT NULL,
@@ -43,18 +43,18 @@ CREATE TABLE IF NOT EXISTS `cotonet-test`.`developers` (
   INDEX `fk_developers_system_idx` (`system_id` ASC),
   CONSTRAINT `fk_developers_system`
     FOREIGN KEY (`system_id`)
-    REFERENCES `cotonet-test`.`systems` (`id`)
+    REFERENCES `cotonet_test`.`systems` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `cotonet-test`.`merge_scenarios`
+-- Table `cotonet_test`.`merge_scenarios`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `cotonet-test`.`merge_scenarios` ;
+DROP TABLE IF EXISTS `cotonet_test`.`merge_scenarios` ;
 
-CREATE TABLE IF NOT EXISTS `cotonet-test`.`merge_scenarios` (
+CREATE TABLE IF NOT EXISTS `cotonet_test`.`merge_scenarios` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `system_id` INT UNSIGNED NOT NULL,
   `commit_base` VARCHAR(40) NOT NULL,
@@ -66,18 +66,18 @@ CREATE TABLE IF NOT EXISTS `cotonet-test`.`merge_scenarios` (
   INDEX `fk_mergescenarios_systems_idx` (`system_id` ASC),
   CONSTRAINT `fk_mergescenarios_systems`
     FOREIGN KEY (`system_id`)
-    REFERENCES `cotonet-test`.`systems` (`id`)
+    REFERENCES `cotonet_test`.`systems` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `cotonet-test`.`networks`
+-- Table `cotonet_test`.`networks`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `cotonet-test`.`networks` ;
+DROP TABLE IF EXISTS `cotonet_test`.`networks` ;
 
-CREATE TABLE IF NOT EXISTS `cotonet-test`.`networks` (
+CREATE TABLE IF NOT EXISTS `cotonet_test`.`networks` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `merge_scenario_id` INT UNSIGNED NOT NULL,
   `type` CHAR(1) NOT NULL,
@@ -85,18 +85,18 @@ CREATE TABLE IF NOT EXISTS `cotonet-test`.`networks` (
   INDEX `fk_tags_merge_scenarios_idx` (`merge_scenario_id` ASC),
   CONSTRAINT `fk_tags_merge_scenarios`
     FOREIGN KEY (`merge_scenario_id`)
-    REFERENCES `cotonet-test`.`merge_scenarios` (`id`)
+    REFERENCES `cotonet_test`.`merge_scenarios` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `cotonet-test`.`edges`
+-- Table `cotonet_test`.`edges`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `cotonet-test`.`edges` ;
+DROP TABLE IF EXISTS `cotonet_test`.`edges` ;
 
-CREATE TABLE IF NOT EXISTS `cotonet-test`.`edges` (
+CREATE TABLE IF NOT EXISTS `cotonet_test`.`edges` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `network_id` INT UNSIGNED NOT NULL,
   `dev_a` INT UNSIGNED NOT NULL,
@@ -111,17 +111,17 @@ CREATE TABLE IF NOT EXISTS `cotonet-test`.`edges` (
   INDEX `fk_edge_network_idx` (`network_id` ASC),
   CONSTRAINT `fk_edge_developersa`
     FOREIGN KEY (`dev_a`)
-    REFERENCES `cotonet-test`.`developers` (`id`)
+    REFERENCES `cotonet_test`.`developers` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_edge_developerb`
     FOREIGN KEY (`dev_b`)
-    REFERENCES `cotonet-test`.`developers` (`id`)
+    REFERENCES `cotonet_test`.`developers` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_edge_network`
     FOREIGN KEY (`network_id`)
-    REFERENCES `cotonet-test`.`networks` (`id`)
+    REFERENCES `cotonet_test`.`networks` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
