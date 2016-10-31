@@ -20,9 +20,11 @@
  */
 package br.com.riselabs.cotonet.builder;
 
+import java.awt.LinearGradientPaint;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import br.com.riselabs.cotonet.builder.commands.ExternalGitCommand;
 import br.com.riselabs.cotonet.builder.commands.ExternalGitCommand.CommandType;
@@ -73,9 +75,11 @@ public class ChunkBasedNetworkBuilder extends
 	protected List<DeveloperNode> getDeveloperNodes(
 			ConflictChunk<CommandLineBlameResult> cChunk) {
 		List<DeveloperNode> result = new ArrayList<DeveloperNode>();
-
+		
 		for (Blame<CommandLineBlameResult> blame : cChunk.getBlames()) {
+			
 			CommandLineBlameResult bResult = blame.getResult();
+									
 			for (DeveloperNode aDev : bResult.getAuthors()) {
 				if (!getProject().getDevs().values().contains(aDev)) {
 					// if there is no such dev in the project, then add it
@@ -84,8 +88,21 @@ public class ChunkBasedNetworkBuilder extends
 					// else update the reference with the project one
 					aDev = getProject().getDevByMail(aDev.getEmail());
 				}
+				
 				if (!result.contains(aDev)) {
-					result.add(aDev);
+					for (int line : bResult.getLineAuthorsMap().keySet()) {
+						if (line >= cChunk.getBeginLine()
+								&& line <= cChunk.getEndLine()
+								&& bResult.getLineAuthorsMap().get(line).equals(aDev)
+								// TODO: we have to check whether bResult.getLineCommitMap().get(line) is between
+								// cChunk.getBase() and (cchunk.getLeft or cchunk.getRight)
+								// (using jgit, using revwalk or something)
+								) {
+							result.add(aDev);
+							break;
+						}
+					}
+					
 				}
 			}
 		}
